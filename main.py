@@ -18,19 +18,20 @@ else:
         gray = img_utils.to_grayscale(frame)
 '''
 
-[images, labels] = dataloader.load_images(dir['asl_tr'])
 
 # gesture classification
 # DNN with ASL-dataset
 
-# load training data set
+# load training images and labels
+data = dataloader.load_images(dir['asl_tr'])
+
 
 # labels and images
+print('sandro is lul')
 
 # dataloader
 
 # training
-
 
 # software reaction
 # spotify API
