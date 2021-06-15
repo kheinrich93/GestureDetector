@@ -15,6 +15,6 @@ def get_dirs():
     src = os.path.join(project, 'src')
 
     dir_dict = {'project': project, 'res': res,
-                'my_data_te': my_data_te, 'src': src}
+                'my_data_te': my_data_te, 'asl_tr': asl_tr, 'src': src}
 
     return dir_dict

@@ -30,3 +30,7 @@ def resize_image_to_percent(img, scale_percent=60):
 def draw_bb(img, start_point, end_point, color=(255, 0, 0), thickness=2):
 
     return cv2.rectangle(img, start_point, end_point, color, thickness)
+
+
+# def tf_crop(img):
+#    test = tf.image.crop_to_bounding_box(cap, offset[0], offset[1], 200, 200)
