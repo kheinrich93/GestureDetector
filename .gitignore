@@ -131,8 +131,5 @@ dmypy.json
 # Visual Studio
 .vscode/
 
-# cache
-.pyc
-src/__pycache__/
 # training data
 res/
