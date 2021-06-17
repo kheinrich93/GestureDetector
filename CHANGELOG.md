@@ -2,6 +2,15 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.0 (2021-06-17)
+### Feature
+* Added new NN workflow ([`4e9b019`](https://github.com/kheinrich93/GestureDetector/commit/4e9b019b11b349647ff6d3cefc731127e6426318))
+* Added tf loading ([`19a8b98`](https://github.com/kheinrich93/GestureDetector/commit/19a8b987bfafe4ff07cb3121aa795c05b79b012f))
+
+### Fix
+* Reset version ([`75239fe`](https://github.com/kheinrich93/GestureDetector/commit/75239fe17adea0a1ecd0fff221fe4b27643e46c4))
+* Enabled tf casting ([`6642ac7`](https://github.com/kheinrich93/GestureDetector/commit/6642ac7cada2f721baa8e4ae54f50b5469ec6907))
+
 ## v0.2.0 (2021-06-17)
 ### Feature
 * Semantic release ([`4a1c97c`](https://github.com/kheinrich93/GestureDetector/commit/4a1c97c4e21c9b07aa1f79eed0a0eadeed1cb956))
