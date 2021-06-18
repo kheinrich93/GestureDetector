@@ -26,13 +26,12 @@ def optimize_dataset(train_ds, val_ds, batch_size):
 
 
 def create_cp(dir):
-    checkpoint_path = dir + "/cp-best.ckpt"
-    checkpoint_dir = os.path.dirname(checkpoint_path)
+    cp_dir = os.path.dirname(dir)
 
     cp_callback = tf.keras.callbacks.ModelCheckpoint(
-        filepath=checkpoint_path, save_weights_only=True, save_best_only=True, verbose=1)
+        filepath=dir, save_best_only=True, verbose=1)
 
-    return cp_callback
+    return cp_callback, cp_dir
 
 
 def configure_for_performance(ds, batch_size, AUTOTUNE):
