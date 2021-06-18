@@ -6,8 +6,3 @@ dir = utils.get_dirs()
 
 # train Gesture CNN
 gesture_NN(dir, batch_size=64)
-
-# help
-# progressive loading re
-# https://machinelearningmastery.com/how-to-load-large-datasets-from-directories-for-deep-learning-with-keras/
-# https://keras.io/api/preprocessing/image/
