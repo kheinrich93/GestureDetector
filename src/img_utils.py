@@ -1,6 +1,5 @@
 import os.path
 import cv2
-import tensorflow as tf
 
 
 def read_image(img_path):
@@ -36,16 +35,3 @@ def resize_image_to_size(img, dim=(200, 200)):
 def draw_bb(img, start_point, end_point, color=(255, 0, 0), thickness=2):
 
     return cv2.rectangle(img, start_point, end_point, color, thickness)
-
-
-# def tf_crop(img):
-#    test = tf.image.crop_to_bounding_box(cap, offset[0], offset[1], 200, 200)
-
-def decode_img(img_path, img_height=64, img_width=64):
-    img = tf.io.read_file(img_path)
-    img = tf.image.decode_jpeg(img, channels=3)
-    img = tf.cast(img, tf.float32)
-
-    # tf.io.decode_and_crop_jpeg
-
-    return tf.image.resize(img, [img_height, img_width])

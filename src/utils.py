@@ -1,5 +1,4 @@
 import os.path
-import tensorflow as tf
 
 
 def get_dirs():
@@ -18,14 +17,6 @@ def get_dirs():
     src = os.path.join(project, 'src')
 
     dir_dict = {'project': project, 'res': res, 'cp_gesture': cp_gesture,
-                'my_data_te': my_data_te, 'asl_tr': asl_tr, 'src': src}
+                'my_data_te': my_data_te, 'asl_tr': asl_tr, 'asl_te': asl_te, 'src': src}
 
     return dir_dict
-
-
-def configure_for_performance(ds, batch_size, AUTOTUNE):
-    ds = ds.cache()
-    ds = ds.shuffle(buffer_size=1000)
-    ds = ds.batch(batch_size)
-    ds = ds.prefetch(buffer_size=AUTOTUNE)
-    return ds
