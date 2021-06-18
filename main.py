@@ -5,7 +5,7 @@ from train_NN import gesture_NN as gesture_NN
 dir = utils.get_dirs()
 
 # train Gesture CNN
-gesture_NN(dir, batch_size=128)
+gesture_NN(dir, batch_size=64)
 
 # help
 # progressive loading re

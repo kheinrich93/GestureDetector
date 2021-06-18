@@ -11,36 +11,48 @@ def gesture_NN(dir, batch_size):
     n_classes = 29
     img_height = 80
     img_width = 80
-    BATCH_SIZE = 64
+    BATCH_SIZE = batch_size
     VAL_SPLIT = 0.2
     EPOCHS = 1
 
-    train_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
+    strategy = tf.distribute.experimental.MultiWorkerMirroredStrategy()
+
+    datagen = tf.keras.preprocessing.image.ImageDataGenerator(
         rescale=1./255, validation_split=VAL_SPLIT)
 
-    train_generator = train_datagen.flow_from_directory(
-        'res/training/asl/',
-        target_size=(150, 150),
+    train_generator = datagen.flow_from_directory(
+        dir['asl_tr'],
+        color_mode="rgb",
         batch_size=BATCH_SIZE,
+        target_size=(img_height, img_width),
+        subset="training",
+        shuffle=True,
         class_mode='categorical')
 
-    model = graph.create_model()
+    val_generator = datagen.flow_from_directory(
+        dir['asl_tr'],
+        color_mode="rgb",
+        batch_size=BATCH_SIZE,
+        target_size=(img_height, img_width),
+        subset="validation",
+        shuffle=True,
+        class_mode='categorical')
+
+    with strategy.scope():
+        model = graph.create_model()
+
+    options = tf.data.Options()
+    options.experimental_distribute.auto_shard_policy = tf.data.experimental.AutoShardPolicy.OFF
+    #train_data = train_generator.with_options(options)
+    #val_data = val_generator.with_options(options)
 
     model.compile(
-        optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+        optimizer=tf.keras.optimizers.Adam(learning_rate=0.004),
         loss=tf.losses.CategoricalCrossentropy(),
         metrics=['accuracy'])
 
-    model.fit(train_generator, batch_size=BATCH_SIZE,
-              validation_split=VAL_SPLIT, epochs=EPOCHS, verbose=2)
-
-    #test_datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1./255)
-
-    # train_it = datagen.flow_from_directory(
-    # directory='res/training/asl/', class_mode='categorical', batch_size=64)
-
-    # datagen.fit(train_it)
-    # fits the model on batches with real-time data augmentation:
+    model.fit(train_generator, batch_size=BATCH_SIZE, epochs=EPOCHS,
+              validation_data=val_generator, verbose=2)
 
     pass
 
