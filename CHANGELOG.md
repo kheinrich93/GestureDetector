@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.0 (2021-06-18)
+### Feature
+* Added working CNN ([`d63f3a2`](https://github.com/kheinrich93/GestureDetector/commit/d63f3a203204fa59e4d48bd3c98c23248cd42084))
+* Added val set and more options ([`e4e4cab`](https://github.com/kheinrich93/GestureDetector/commit/e4e4cabaa39ff20a59fdebc59968076e2ba3010a))
+
 ## v0.3.0 (2021-06-17)
 ### Feature
 * Added new NN workflow ([`4e9b019`](https://github.com/kheinrich93/GestureDetector/commit/4e9b019b11b349647ff6d3cefc731127e6426318))
