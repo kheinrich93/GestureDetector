@@ -26,3 +26,7 @@ def create_model():
     model.add(Dense(29, activation='softmax'))
 
     return model
+
+
+def create_exp_model():
+    create_model()
