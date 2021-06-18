@@ -3,13 +3,13 @@ import graph
 import src.tf_utils as tf_utils
 
 
-def gesture_NN(dir, batch_size):
+def tr_gesture_NN(dir, batch_size):
     # params
     n_classes = 29
     img_dim = (80, 80)
     BATCH_SIZE = batch_size
     VAL_SPLIT = 0.2
-    EPOCHS = 3
+    EPOCHS = 1
 
     strategy = tf.distribute.experimental.MultiWorkerMirroredStrategy()
 
@@ -29,19 +29,8 @@ def gesture_NN(dir, batch_size):
         loss=tf.losses.CategoricalCrossentropy(),
         metrics=['accuracy'])
 
-    cp_callback = tf_utils.create_cp(dir['cp_gesture'])
+    cp_callback, cp_dir = tf_utils.create_cp(dir['cp_gesture'])
+    model.load_weights(dir['cp_gesture'])
 
     model.fit(train_generator, batch_size=BATCH_SIZE, epochs=EPOCHS,
               validation_data=val_generator, verbose=1, callbacks=[cp_callback])
-
-
-def test_gesture_NN(dir, batch_size):
-    test_gen = tf.keras.preprocessing.image.ImageDataGenerator(
-        rescale=1./255)
-
-    test_generator = test_gen.flow_from_directory(
-        dir['asl_te'],
-        color_mode="rgb",
-        class_mode='categorical')
-
-    model = graph.create_model()
