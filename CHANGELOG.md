@@ -2,6 +2,15 @@
 
 <!--next-version-placeholder-->
 
+## v0.5.0 (2021-06-20)
+### Feature
+* Started exp env ([`ceceac0`](https://github.com/kheinrich93/GestureDetector/commit/ceceac08bf50adfc840526353d935d90c94f1573))
+* Added testing ([`52329a0`](https://github.com/kheinrich93/GestureDetector/commit/52329a03ee7611ec58d1f33d7ccf91a77021683f))
+
+### Fix
+* Removed exp setup ([`6f10754`](https://github.com/kheinrich93/GestureDetector/commit/6f107548c4730a1ed6700692e1db6a68043f529b))
+* Fixed loading cp ([`40488fd`](https://github.com/kheinrich93/GestureDetector/commit/40488fdd74d6ebbe23d7d07eec19ed0adcb25795))
+
 ## v0.4.0 (2021-06-18)
 ### Feature
 * Added working CNN ([`d63f3a2`](https://github.com/kheinrich93/GestureDetector/commit/d63f3a203204fa59e4d48bd3c98c23248cd42084))
