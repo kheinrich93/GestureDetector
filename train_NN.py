@@ -21,12 +21,8 @@ def tr_gesture_NN(dir, batch_size, use_pretrained_cp=True):
     val_generator = tf_utils.create_generator_flow_from_dir(
         dir['asl_tr'], datagen, img_dim, subset="validation", color_mode="rgb", batch_size=BATCH_SIZE, shuffle=True, class_mode='categorical')
 
+    # create and compiles model
     model = graph.create_model()
-
-    model.compile(
-        optimizer="adam",
-        loss=tf.losses.CategoricalCrossentropy(),
-        metrics=['accuracy'])
 
     cp_callback, cp_dir = tf_utils.create_cp(dir['cp_gesture'])
 

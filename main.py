@@ -7,10 +7,10 @@ from hp_tuner import find_opt_hp
 dir = utils.get_dirs()
 
 # train Gesture CNN
-#tr_gesture_NN(dir, batch_size=64)
+tr_gesture_NN(dir, batch_size=64)
 
 # find optimal hyperparams
-find_opt_hp(dir, batch_size=64)
+#find_opt_hp(dir, batch_size=64)
 
 # test Gesture CNN
 # te_gesture_NN(dir, batch_size=64)
