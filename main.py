@@ -6,7 +6,7 @@ from test_NN import te_gesture_NN as te_gesture_NN
 dir = utils.get_dirs()
 
 # train Gesture CNN
-tr_gesture_NN(dir, exp_env=True, batch_size=64)
+tr_gesture_NN(dir, batch_size=64)
 
 # test Gesture CNN
 # te_gesture_NN(dir, batch_size=64)
