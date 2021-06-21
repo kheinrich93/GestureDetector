@@ -14,3 +14,10 @@ tr_gesture_NN(dir, batch_size=64)
 
 # test Gesture CNN
 # te_gesture_NN(dir, batch_size=64)
+
+# reduce overfitting
+# data augment, less complex model, regularization, dropout, BN
+
+# plot loss,val_loss
+
+# load hp
