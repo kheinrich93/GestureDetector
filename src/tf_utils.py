@@ -69,3 +69,9 @@ def create_generator_flow_from_dir(dir, datagen, img_dim, subset="training", col
         class_mode=class_mode)
 
     return gen
+
+
+def summary_to_file(dir, model):
+    with open(dir + '/report.txt', 'w') as fh:
+        # Pass the file handle in as a lambda function to make it callable
+        model.summary(print_fn=lambda x: fh.write(x + '\n'))
