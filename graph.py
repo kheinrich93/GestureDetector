@@ -3,37 +3,40 @@ from keras.layers import Conv2D, MaxPooling2D, Dense, Dropout, Flatten, BatchNor
 from tensorflow import keras
 
 
-def create_model():
+def conv2D_block(model, filters, kernel_regularizer):
+    model.add(Conv2D(filters=filters, kernel_size=5,
+                     padding='same', activation='relu', kernel_regularizer=kernel_regularizer))
+    model.add(BatchNormalization())
 
-    kernel_regularizer = tf.keras.regularizers.L2()
+    return model
+
+
+def create_model(img_dim, n_classes):
+
+    kernel_regularizer = tf.keras.regularizers.L1()
+
+    filters = 32
 
     model = keras.Sequential()
 
-    model.add(keras.layers.InputLayer(shape=(80, 80, 3)))
+    model.add(keras.layers.InputLayer(input_shape=(img_dim[0], img_dim[1], 3)))
 
-    model.add(Conv2D(filters=64, kernel_size=5, padding='same',
-                     activation='relu', kernel_regularizer=kernel_regularizer))
-    model.add(BatchNormalization())
-    model.add(Conv2D(filters=64, kernel_size=5,
-                     padding='same', activation='relu', kernel_regularizer=kernel_regularizer))
-    model.add(BatchNormalization())
+    model = conv2D_block(model, filters, kernel_regularizer)
+    model.add(MaxPooling2D(pool_size=(4, 4)))
+    model.add(Dropout(0.2))
+
+    model = conv2D_block(model, filters*2, kernel_regularizer)
+    model.add(Dropout(0.2))
+
+    model = conv2D_block(model, filters*2, kernel_regularizer)
     model.add(MaxPooling2D(pool_size=(4, 4)))
     model.add(Dropout(0.5))
-    model.add(Conv2D(filters=128, kernel_size=5,
-                     padding='same', activation='relu', kernel_regularizer=kernel_regularizer))
-    model.add(BatchNormalization())
-    model.add(Conv2D(filters=128, kernel_size=5,
-                     padding='same', activation='relu', kernel_regularizer=kernel_regularizer))
-    model.add(BatchNormalization())
-    model.add(MaxPooling2D(pool_size=(4, 4)))
-    model.add(Dropout(0.5))
-    model.add(Conv2D(filters=256, kernel_size=5,
-                     padding='same', activation='relu', kernel_regularizer=kernel_regularizer))
-    model.add(BatchNormalization())
 
+    model = conv2D_block(model, filters*4, kernel_regularizer)
     model.add(Dropout(0.5))
+
     model.add(Flatten())
-    model.add(Dense(29, activation='softmax'))
+    model.add(Dense(n_classes, activation='softmax'))
 
     opt = tf.keras.optimizers.Adam(learning_rate=0.001)
     model.compile(

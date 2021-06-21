@@ -2,41 +2,41 @@ Model: "sequential"
 _________________________________________________________________
 Layer (type)                 Output Shape              Param #   
 =================================================================
-module_wrapper (ModuleWrappe (None, 80, 80, 64)        4864      
+module_wrapper (ModuleWrappe (None, 80, 80, 32)        2432      
 _________________________________________________________________
-module_wrapper_1 (ModuleWrap (None, 80, 80, 64)        256       
+module_wrapper_1 (ModuleWrap (None, 80, 80, 32)        128       
 _________________________________________________________________
-module_wrapper_2 (ModuleWrap (None, 80, 80, 64)        102464    
+module_wrapper_2 (ModuleWrap (None, 20, 20, 32)        0         
 _________________________________________________________________
-module_wrapper_3 (ModuleWrap (None, 80, 80, 64)        256       
+module_wrapper_3 (ModuleWrap (None, 20, 20, 32)        0         
 _________________________________________________________________
-module_wrapper_4 (ModuleWrap (None, 20, 20, 64)        0         
+module_wrapper_4 (ModuleWrap (None, 20, 20, 32)        25632     
 _________________________________________________________________
-module_wrapper_5 (ModuleWrap (None, 20, 20, 64)        0         
+module_wrapper_5 (ModuleWrap (None, 20, 20, 32)        128       
 _________________________________________________________________
-module_wrapper_6 (ModuleWrap (None, 20, 20, 128)       204928    
+module_wrapper_6 (ModuleWrap (None, 5, 5, 32)          0         
 _________________________________________________________________
-module_wrapper_7 (ModuleWrap (None, 20, 20, 128)       512       
+module_wrapper_7 (ModuleWrap (None, 5, 5, 32)          0         
 _________________________________________________________________
-module_wrapper_8 (ModuleWrap (None, 20, 20, 128)       409728    
+module_wrapper_8 (ModuleWrap (None, 5, 5, 64)          51264     
 _________________________________________________________________
-module_wrapper_9 (ModuleWrap (None, 20, 20, 128)       512       
+module_wrapper_9 (ModuleWrap (None, 5, 5, 64)          256       
 _________________________________________________________________
-module_wrapper_10 (ModuleWra (None, 5, 5, 128)         0         
+module_wrapper_10 (ModuleWra (None, 1, 1, 64)          0         
 _________________________________________________________________
-module_wrapper_11 (ModuleWra (None, 5, 5, 128)         0         
+module_wrapper_11 (ModuleWra (None, 1, 1, 64)          0         
 _________________________________________________________________
-module_wrapper_12 (ModuleWra (None, 5, 5, 256)         819456    
+module_wrapper_12 (ModuleWra (None, 1, 1, 128)         204928    
 _________________________________________________________________
-module_wrapper_13 (ModuleWra (None, 5, 5, 256)         1024      
+module_wrapper_13 (ModuleWra (None, 1, 1, 128)         512       
 _________________________________________________________________
-module_wrapper_14 (ModuleWra (None, 5, 5, 256)         0         
+module_wrapper_14 (ModuleWra (None, 1, 1, 128)         0         
 _________________________________________________________________
-module_wrapper_15 (ModuleWra (None, 6400)              0         
+module_wrapper_15 (ModuleWra (None, 128)               0         
 _________________________________________________________________
-module_wrapper_16 (ModuleWra (None, 29)                185629    
+module_wrapper_16 (ModuleWra (None, 29)                3741      
 =================================================================
-Total params: 1,729,629
-Trainable params: 1,728,349
-Non-trainable params: 1,280
+Total params: 289,021
+Trainable params: 288,509
+Non-trainable params: 512
 _________________________________________________________________

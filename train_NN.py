@@ -22,7 +22,7 @@ def tr_gesture_NN(dir, batch_size, use_pretrained_cp=False):
         dir['asl_tr'], datagen, img_dim, subset="validation", color_mode="rgb", batch_size=BATCH_SIZE, shuffle=True, class_mode='categorical')
 
     # create and compiles model
-    model = graph.create_model()
+    model = graph.create_model(img_dim, n_classes)
 
     tf_utils.summary_to_file(dir['summary'], model)
 
