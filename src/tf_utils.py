@@ -29,7 +29,7 @@ def create_cp(dir):
     cp_dir = os.path.dirname(dir)
 
     cp_callback = tf.keras.callbacks.ModelCheckpoint(
-        filepath=dir, save_best_only=True, verbose=1)
+        filepath=dir, save_weights_only=True, save_best_only=True, verbose=1)
 
     return cp_callback, cp_dir
 
@@ -43,13 +43,17 @@ def configure_for_performance(ds, batch_size, AUTOTUNE):
     return ds
 
 
-def decode_img(img_path, img_height=64, img_width=64):
+def decode_img(img_path):
     img = tf.io.read_file(img_path)
     img = tf.image.decode_jpeg(img, channels=3)
     img = tf.cast(img, tf.float32)
 
     # tf.io.decode_and_crop_jpeg
 
+    return img
+
+
+def resize_image(img, img_height=64, img_width=64):
     return tf.image.resize(img, [img_height, img_width])
 
 
