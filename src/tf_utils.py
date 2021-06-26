@@ -62,12 +62,12 @@ def tf_crop(img, offset):
     return img
 
 
-def create_generator_flow_from_dir(dir, datagen, img_dim, subset="training", color_mode="rgb", batch_size=32, shuffle=True, class_mode='categorical'):
+def create_generator_flow_from_dir(dir, datagen, target_size, subset="training", color_mode="rgb", batch_size=32, shuffle=True, class_mode='categorical'):
     gen = datagen.flow_from_directory(
         dir,
         color_mode=color_mode,
         batch_size=batch_size,
-        target_size=(img_dim[0], img_dim[1]),
+        target_size=target_size,
         subset=subset,
         shuffle=shuffle,
         class_mode=class_mode)

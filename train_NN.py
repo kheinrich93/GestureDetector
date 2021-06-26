@@ -8,7 +8,7 @@ import os
 def tr_gesture_NN(dir, batch_size, use_pretrained_cp=False, save_cp=True):
     # params
     n_classes = 29
-    img_dim = (80, 80)
+    img_dim = (64, 64)
     BATCH_SIZE = batch_size
     VAL_SPLIT = 0.2
     EPOCHS = 4
@@ -17,15 +17,15 @@ def tr_gesture_NN(dir, batch_size, use_pretrained_cp=False, save_cp=True):
         rescale=1./255, validation_split=VAL_SPLIT)
 
     train_generator = tf_utils.create_generator_flow_from_dir(
-        dir['asl_tr'], datagen, img_dim, subset="training", color_mode="rgb", batch_size=BATCH_SIZE, shuffle=True, class_mode='categorical')
+        dir['asl_tr'], datagen, target_size=img_dim, subset="training", color_mode="rgb", batch_size=BATCH_SIZE, shuffle=True, class_mode='categorical')
 
     val_generator = tf_utils.create_generator_flow_from_dir(
-        dir['asl_tr'], datagen, img_dim, subset="validation", color_mode="rgb", batch_size=BATCH_SIZE, shuffle=True, class_mode='categorical')
+        dir['asl_tr'], datagen, target_size=img_dim, subset="validation", color_mode="rgb", batch_size=BATCH_SIZE, shuffle=True, class_mode='categorical')
 
     # create and compiles model
     #model = graph.create_model(img_dim, n_classes)
 
-    model = graph.Net().get_model(img_dim, n_classes)
+    model = graph.Net().get_model_exp(img_dim, n_classes)
 
     opt = tf.keras.optimizers.Adam(learning_rate=0.001)
     model.compile(

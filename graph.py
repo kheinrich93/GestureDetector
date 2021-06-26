@@ -18,7 +18,7 @@ class Net:
     def get_model(self, img_dim, n_classes):
         filters = 32
 
-        kernel_regularizer = tf.keras.regularizers.L1()
+        kernel_regularizer = None
 
         inputs = Input(shape=(img_dim[0], img_dim[1], 3), name='input')
 
@@ -34,6 +34,58 @@ class Net:
             pool2, filters*4, kernel_regularizer, dropout=0.5, kernel_size=5, name='CONV3')
 
         flatten = Flatten()(conv3)
+        predictions = Dense(n_classes, activation='softmax')(flatten)
+
+        return Model(inputs=inputs, outputs=predictions)
+
+    def get_model_exp(self, img_dim, n_classes):
+        filters = 32
+
+        kernel_regularizer = None
+
+        inputs = Input(shape=(img_dim[0], img_dim[1], 3), name='input')
+
+        x1 = Conv2D(64, kernel_size=5, kernel_regularizer=kernel_regularizer, activation=None,
+                    padding='same')(inputs)
+
+        x1 = BatchNormalization()(x1)
+        x1 = Activation('relu')(x1)
+
+        x2 = Conv2D(64, kernel_size=5, kernel_regularizer=kernel_regularizer, activation=None,
+                    padding='same')(x1)
+
+        x2 = BatchNormalization()(x2)
+        x2 = Activation('relu')(x2)
+
+        pool1 = MaxPooling2D(pool_size=(4, 4))(x2)
+
+        drop1 = Dropout(0.5)(pool1)
+
+        x3 = Conv2D(96, kernel_size=5, kernel_regularizer=kernel_regularizer,
+                    activation=None, padding='same')(drop1)
+
+        x3 = BatchNormalization()(x3)
+        x3 = Activation('relu')(x3)
+
+        x4 = Conv2D(128, kernel_size=5, kernel_regularizer=kernel_regularizer,
+                    activation=None, padding='same')(x3)
+
+        x4 = BatchNormalization()(x4)
+        x4 = Activation('relu')(x4)
+
+        pool2 = MaxPooling2D(pool_size=(4, 4))(x4)
+
+        drop2 = Dropout(0.5)(pool2)
+
+        x5 = Conv2D(256, kernel_size=5, kernel_regularizer=kernel_regularizer,
+                    activation='relu', padding='same')(drop2)
+
+        x5 = BatchNormalization()(x5)
+        x5 = Activation('relu')(x5)
+
+        drop3 = Dropout(0.5)(x5)
+
+        flatten = Flatten()(drop3)
         predictions = Dense(n_classes, activation='softmax')(flatten)
 
         return Model(inputs=inputs, outputs=predictions)
