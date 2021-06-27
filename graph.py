@@ -2,17 +2,16 @@ import tensorflow as tf
 from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Dense, Dropout, Flatten, BatchNormalization, Activation
 from keras import Sequential
 from tensorflow.keras.models import Model
-# make class of net https://www.tensorflow.org/guide/checkpoint#loading_mechanics
 
 
 class Net:
+
     @staticmethod
-    def conv2D_block(x, filters, kernel_regularizer, dropout=0, kernel_size=5, name=''):
+    def conv2D_block(x, filters, kernel_size=5, kernel_regularizer=None, name=''):
         x = Conv2D(filters, kernel_size=kernel_size, kernel_regularizer=kernel_regularizer, activation=None,
                    padding='same', name=name)(x)
         x = BatchNormalization()(x)
         x = Activation('relu')(x)
-        x = Dropout(dropout)(x)
         return x
 
     def get_model(self, img_dim, n_classes):
@@ -22,66 +21,19 @@ class Net:
 
         inputs = Input(shape=(img_dim[0], img_dim[1], 3), name='input')
 
-        conv1 = self.conv2D_block(
-            inputs, filters, kernel_regularizer, dropout=0, kernel_size=5, name='CONV1')
-        pool1 = MaxPooling2D(pool_size=(4, 4))(conv1)
-
-        conv2 = self.conv2D_block(
-            pool1, filters*2, kernel_regularizer, dropout=0.5, kernel_size=5, name='CONV2')
-        pool2 = MaxPooling2D(pool_size=(4, 4))(conv2)
-
-        conv3 = self.conv2D_block(
-            pool2, filters*4, kernel_regularizer, dropout=0.5, kernel_size=5, name='CONV3')
-
-        flatten = Flatten()(conv3)
-        predictions = Dense(n_classes, activation='softmax')(flatten)
-
-        return Model(inputs=inputs, outputs=predictions)
-
-    def get_model_exp(self, img_dim, n_classes):
-        filters = 32
-
-        kernel_regularizer = None
-
-        inputs = Input(shape=(img_dim[0], img_dim[1], 3), name='input')
-
-        x1 = Conv2D(64, kernel_size=5, kernel_regularizer=kernel_regularizer, activation=None,
-                    padding='same')(inputs)
-
-        x1 = BatchNormalization()(x1)
-        x1 = Activation('relu')(x1)
-
-        x2 = Conv2D(64, kernel_size=5, kernel_regularizer=kernel_regularizer, activation=None,
-                    padding='same')(x1)
-
-        x2 = BatchNormalization()(x2)
-        x2 = Activation('relu')(x2)
+        x1 = self.conv2D_block(inputs, filters*2, name='conv1')
+        x2 = self.conv2D_block(x1, filters*2, name='conv2')
 
         pool1 = MaxPooling2D(pool_size=(4, 4))(x2)
-
         drop1 = Dropout(0.5)(pool1)
 
-        x3 = Conv2D(96, kernel_size=5, kernel_regularizer=kernel_regularizer,
-                    activation=None, padding='same')(drop1)
-
-        x3 = BatchNormalization()(x3)
-        x3 = Activation('relu')(x3)
-
-        x4 = Conv2D(128, kernel_size=5, kernel_regularizer=kernel_regularizer,
-                    activation=None, padding='same')(x3)
-
-        x4 = BatchNormalization()(x4)
-        x4 = Activation('relu')(x4)
+        x3 = self.conv2D_block(drop1, filters*4, name='conv3')
+        x4 = self.conv2D_block(x3, filters*6, name='conv4')
 
         pool2 = MaxPooling2D(pool_size=(4, 4))(x4)
-
         drop2 = Dropout(0.5)(pool2)
 
-        x5 = Conv2D(256, kernel_size=5, kernel_regularizer=kernel_regularizer,
-                    activation='relu', padding='same')(drop2)
-
-        x5 = BatchNormalization()(x5)
-        x5 = Activation('relu')(x5)
+        x5 = self.conv2D_block(drop2, filters*8, name='conv5')
 
         drop3 = Dropout(0.5)(x5)
 
@@ -91,53 +43,7 @@ class Net:
         return Model(inputs=inputs, outputs=predictions)
 
 
-def seq_conv2D_block(model, filters, kernel_regularizer):
-    model.add(Conv2D(filters=filters, kernel_size=5,
-                     padding='same', activation='relu', kernel_regularizer=kernel_regularizer))
-    model.add(BatchNormalization())
-
-    return model
-
-
-def seq_create_model(img_dim, n_classes):
-
-    kernel_regularizer = tf.keras.regularizers.L1()
-
-    filters = 32
-
-    model = Sequential()
-
-    model.add(tf.keras.layers.InputLayer(
-        input_shape=(img_dim[0], img_dim[1], 3)))
-
-    model = seq_conv2D_block(model, filters, kernel_regularizer)
-    model.add(MaxPooling2D(pool_size=(4, 4)))
-    model.add(Dropout(0.2))
-    model.add(BatchNormalization())
-
-    model = seq_conv2D_block(model, filters*2, kernel_regularizer)
-    model.add(Dropout(0.2))
-    model.add(BatchNormalization())
-
-    model = seq_conv2D_block(model, filters*2, kernel_regularizer)
-    model.add(MaxPooling2D(pool_size=(4, 4)))
-    model.add(Dropout(0.5))
-
-    model = seq_conv2D_block(model, filters*4, kernel_regularizer)
-    model.add(Dropout(0.5))
-
-    model.add(Flatten())
-    model.add(Dense(n_classes, activation='softmax'))
-
-    opt = tf.keras.optimizers.Adam(learning_rate=0.001)
-    model.compile(
-        optimizer=opt,
-        loss=tf.losses.CategoricalCrossentropy(),
-        metrics=['accuracy'])
-
-    return model
-
-
+# TODO: convert to func model
 def create_exp_model(hp):
 
     hp_filters = hp.Int('filter', min_value=8, max_value=128, step=8)
