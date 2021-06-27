@@ -5,8 +5,7 @@ def get_dirs():
     project = os.getcwd()
     res = os.path.join(project, 'res')
     cp = os.path.join(project, 'cp')
-    cp_gesture = os.path.join(cp, 'cp_gesture')
-    cp_gesture = os.path.join(cp_gesture, 'gestureNN')
+    cp_gesture = os.path.join(cp, 'cp_gesture', 'gestureNN')
 
     summary = os.path.join(project, 'summary')
 
@@ -15,7 +14,6 @@ def get_dirs():
     my_data_te = os.path.join(testing, 'my_data')
     training = os.path.join(res, 'training')
     asl_tr = os.path.join(training, 'asl')
-    my_data_tr = os.path.join(training, 'my_data')
 
     src = os.path.join(project, 'src')
 

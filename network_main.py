@@ -1,6 +1,6 @@
 import src.utils as utils
 from train_NN import tr_gesture_NN
-from predict import predict
+from predict import predict_from_image
 from hp_tuner import find_opt_hp
 from hp.hyperparams import hyperparams
 
@@ -19,4 +19,4 @@ if hp.tune_hp:
 
 # test Gesture CNN
 if hp.predict:
-    predict(dir, hp)
+    predict_from_image('tes', dir, hp)

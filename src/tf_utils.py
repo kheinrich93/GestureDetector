@@ -51,8 +51,11 @@ def decode_img(img_path):
     return img
 
 
-def prepare_img_for_predict(img_path, SCALE_FACTOR, shape):
-    img = decode_img(img_path)/SCALE_FACTOR
+def prepare_img_for_predict(img, scale_factor, shape):
+    if os.path.exists(img):
+        img = decode_img(img)
+
+    img = img / scale_factor
     img = tf.image.resize(img, shape)
     img = tf.expand_dims(img, axis=0)
     return img
@@ -75,3 +78,7 @@ def summary_to_file(dir, model):
     with open(dir + '/report.txt', 'w') as fh:
         # Pass the file handle in as a lambda function to make it callable
         model.summary(print_fn=lambda x: fh.write(x + '\n'))
+
+
+def crop_to_bb(img, offset_height, offset_width, target_height, target_width):
+    return tf.image.crop_to_bounding_box(img, offset_height, offset_width, target_height, target_width)

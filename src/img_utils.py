@@ -8,7 +8,6 @@ def read_image(img_path):
         img = cv2.imread(img_path, cv2.IMREAD_COLOR)
     else:
         raise SystemExit('Unable to open %s' % img_path)
-
     return img
 
 
