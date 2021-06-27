@@ -17,7 +17,7 @@ hp = hyperparams()
 img_src = 'img'
 
 if img_src == 'img':
-    path = dirs['my_data_te']+'/b_crop.jpg'
+    path = dirs['my_data_te']+'/v_test.jpg'
     img = read_image(path)
 
 
@@ -30,15 +30,13 @@ img_cropped = crop_to_bb(
     img, start_point[1], start_point[0], box_len, box_len)
 img_cropped = tf.image.resize(img_cropped, (200, 200))
 
+imwrite(dirs['res']+'/b_crop.jpg', img_cropped.numpy())
+
+# predict_from_image
+predict_from_image(img_cropped, dirs, hp)
 
 # plot crop
 img_bb = draw_bb(img, start_point,
                  (start_point[0]+box_len, start_point[1]+box_len))
-
-
-imwrite(dirs['res']+'/b_crop.jpg', img_cropped)
-# predict_from_image
-predict_from_image(img_cropped, dirs, hp)
-
-imshow("Display window", img_bb)
-k = waitKey(0)
+# imshow("Display window", img_bb)
+# k = waitKey(0)

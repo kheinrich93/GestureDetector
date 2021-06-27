@@ -1,8 +1,14 @@
 import src.utils as utils
 from train_NN import tr_gesture_NN
-from predict import predict_from_image
+from predict import predict_from_dir
 from hp_tuner import find_opt_hp
 from hp.hyperparams import hyperparams
+
+# TODO
+# does not detect very bright images
+# greyscale conversion
+# different brightness
+
 
 # set dirs hierarchy in dict
 dir = utils.get_dirs()
@@ -19,4 +25,4 @@ if hp.tune_hp:
 
 # test Gesture CNN
 if hp.predict:
-    predict_from_image('tes', dir, hp)
+    predict_from_dir(dir, hp)

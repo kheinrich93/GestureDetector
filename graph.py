@@ -19,7 +19,7 @@ class Net:
 
         kernel_regularizer = None
 
-        inputs = Input(shape=(img_dim[0], img_dim[1], 3), name='input')
+        inputs = Input(shape=(img_dim), name='input')
 
         x1 = self.conv2D_block(inputs, filters*2, name='conv1')
         x2 = self.conv2D_block(x1, filters*2, name='conv2')

@@ -1,8 +1,7 @@
 import tensorflow as tf
-from tensorflow import keras
 import graph
 import src.tf_utils as tf_utils
-import os
+import numpy as np
 
 
 def tr_gesture_NN(dir, hp, use_pretrained_cp=False, save_cp=True):
@@ -13,16 +12,23 @@ def tr_gesture_NN(dir, hp, use_pretrained_cp=False, save_cp=True):
     VAL_SPLIT = hp.val_split
     EPOCHS = hp.epochs
     SCALE_FACTOR = hp.scale_factor
+    COLOR_MODE = hp.color_mode
 
     # Load images to flow
     datagen = tf.keras.preprocessing.image.ImageDataGenerator(
         rescale=1./SCALE_FACTOR, validation_split=VAL_SPLIT)
 
     train_generator = tf_utils.create_generator_flow_from_dir(
-        dir['asl_tr'], datagen, target_size=IMG_DIM, subset="training", color_mode="rgb", batch_size=BATCH_SIZE, shuffle=True, class_mode='categorical')
+        dir['asl_tr'], datagen, target_size=IMG_DIM, subset="training", color_mode=COLOR_MODE, batch_size=BATCH_SIZE, shuffle=True, class_mode='categorical')
 
     val_generator = tf_utils.create_generator_flow_from_dir(
-        dir['asl_tr'], datagen, target_size=IMG_DIM, subset="validation", color_mode="rgb", batch_size=BATCH_SIZE, shuffle=True, class_mode='categorical')
+        dir['asl_tr'], datagen, target_size=IMG_DIM, subset="validation", color_mode=COLOR_MODE, batch_size=BATCH_SIZE, shuffle=True, class_mode='categorical')
+
+    # set correct dims for grayscale
+    if COLOR_MODE == 'grayscale':
+        IMG_DIM = [IMG_DIM[0], IMG_DIM[1], 1]
+    else:
+        IMG_DIM = [IMG_DIM[0], IMG_DIM[1], 3]
 
     # Create and compile model
     model = graph.Net().get_model(IMG_DIM, N_CLASSES)
@@ -38,7 +44,7 @@ def tr_gesture_NN(dir, hp, use_pretrained_cp=False, save_cp=True):
 
     # Train network, can start with cp-weights
     if save_cp:
-        cp_callback, cp_dir = tf_utils.create_cp(dir['cp_gesture'])
+        cp_callback, _ = tf_utils.create_cp(dir['cp_gesture'])
 
         if use_pretrained_cp:
             path = dir['cp_gesture']

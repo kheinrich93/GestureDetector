@@ -7,7 +7,8 @@ import os
 
 def predict(sample, dir, hp):
     N_CLASSES = hp.n_classes
-    # INPUT_DIM = hp.input_dim
+    IMG_DIM = hp.input_dim
+    COLOR_MODE = hp.color_mode
     # SCALE_FACTOR = hp.scale_factor
 
     # extract labels
@@ -19,8 +20,15 @@ def predict(sample, dir, hp):
     # img_path = dir['asl_te']+'/A/A_test.jpg'
     # sample = prepare_img_for_predict(img_path, SCALE_FACTOR, shape=input_size)
 
+    if COLOR_MODE == 'grayscale':
+        IMG_DIM = [IMG_DIM[0], IMG_DIM[1], 1]
+    else:
+        IMG_DIM = [IMG_DIM[0], IMG_DIM[1], 3]
+
+    sample = tf.image.rgb_to_grayscale(sample)
+
     # Setup network
-    model = graph.Net().get_model((64, 64), N_CLASSES)
+    model = graph.Net().get_model(IMG_DIM, N_CLASSES)
 
     # Load weights from pre-trained network
     path = dir['cp_gesture']
@@ -39,8 +47,10 @@ def predict_from_dir(dir, hp):
     INPUT_DIM = hp.input_dim
     SCALE_FACTOR = hp.scale_factor
 
-    img_path = dir['asl_te']+'/A/A_test.jpg'
-    sample = prepare_img_for_predict(img_path, SCALE_FACTOR, shape=INPUT_DIM)
+    img = dir['asl_te']+'/B/B_test.jpg'
+    img = dir['my_data_te']+'/v_crop.jpg'
+
+    sample = prepare_img_for_predict(img, SCALE_FACTOR, shape=INPUT_DIM)
 
     predict(sample, dir, hp)
 
@@ -48,7 +58,6 @@ def predict_from_dir(dir, hp):
 def predict_from_image(img, dir, hp):
     INPUT_DIM = hp.input_dim
     SCALE_FACTOR = hp.scale_factor
-    img = dir['my_data_te']+'/b_crop.jpg'
 
     sample = prepare_img_for_predict(img, SCALE_FACTOR, shape=INPUT_DIM)
 
