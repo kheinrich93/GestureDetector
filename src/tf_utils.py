@@ -29,7 +29,7 @@ def create_cp(dir):
     cp_dir = os.path.dirname(dir)
 
     cp_callback = tf.keras.callbacks.ModelCheckpoint(
-        filepath=dir, save_best_only=True, verbose=1)
+        filepath=dir, save_weights_only=True, save_best_only=True, verbose=1)
 
     return cp_callback, cp_dir
 
@@ -43,29 +43,35 @@ def configure_for_performance(ds, batch_size, AUTOTUNE):
     return ds
 
 
-def decode_img(img_path, img_height=64, img_width=64):
+def decode_img(img_path):
     img = tf.io.read_file(img_path)
     img = tf.image.decode_jpeg(img, channels=3)
     img = tf.cast(img, tf.float32)
 
-    # tf.io.decode_and_crop_jpeg
-
-    return tf.image.resize(img, [img_height, img_width])
-
-
-def tf_crop(img, offset):
-    img = tf.image.crop_to_bounding_box(img, offset[0], offset[1], 200, 200)
     return img
 
 
-def create_generator_flow_from_dir(dir, datagen, img_dim, subset="training", color_mode="rgb", batch_size=32, shuffle=True, class_mode='categorical'):
+def prepare_img_for_predict(img_path, SCALE_FACTOR, shape):
+    img = decode_img(img_path)/SCALE_FACTOR
+    img = tf.image.resize(img, shape)
+    img = tf.expand_dims(img, axis=0)
+    return img
+
+
+def create_generator_flow_from_dir(dir, datagen, target_size, subset="training", color_mode="rgb", batch_size=32, shuffle=True, class_mode='categorical'):
     gen = datagen.flow_from_directory(
         dir,
         color_mode=color_mode,
         batch_size=batch_size,
-        target_size=(img_dim[0], img_dim[1]),
+        target_size=target_size,
         subset=subset,
         shuffle=shuffle,
         class_mode=class_mode)
 
     return gen
+
+
+def summary_to_file(dir, model):
+    with open(dir + '/report.txt', 'w') as fh:
+        # Pass the file handle in as a lambda function to make it callable
+        model.summary(print_fn=lambda x: fh.write(x + '\n'))
