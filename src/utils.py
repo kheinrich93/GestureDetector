@@ -6,6 +6,7 @@ def get_dirs():
     res = os.path.join(project, 'res')
     cp = os.path.join(project, 'cp')
     cp_gesture = os.path.join(cp, 'cp_gesture')
+    cp_gesture = os.path.join(cp_gesture, 'gestureNN')
 
     summary = os.path.join(project, 'summary')
 

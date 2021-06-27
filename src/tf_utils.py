@@ -48,17 +48,13 @@ def decode_img(img_path):
     img = tf.image.decode_jpeg(img, channels=3)
     img = tf.cast(img, tf.float32)
 
-    # tf.io.decode_and_crop_jpeg
-
     return img
 
 
-def resize_image(img, img_height=64, img_width=64):
-    return tf.image.resize(img, [img_height, img_width])
-
-
-def tf_crop(img, offset):
-    img = tf.image.crop_to_bounding_box(img, offset[0], offset[1], 200, 200)
+def prepare_img_for_predict(img_path, SCALE_FACTOR, shape):
+    img = decode_img(img_path)/SCALE_FACTOR
+    img = tf.image.resize(img, shape)
+    img = tf.expand_dims(img, axis=0)
     return img
 
 
