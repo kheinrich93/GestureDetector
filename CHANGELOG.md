@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v0.6.0 (2021-06-27)
+### Feature
+* Set hp-tuner ([`7915c5c`](https://github.com/kheinrich93/GestureDetector/commit/7915c5c8b0ffbbb5152a70c69961fa764261cdc3))
+
+### Fix
+* Moved model compiler ([`76c629e`](https://github.com/kheinrich93/GestureDetector/commit/76c629edebd88842090ba4721c82bd39e18bf09a))
+
 ## v0.5.0 (2021-06-20)
 ### Feature
 * Started exp env ([`ceceac0`](https://github.com/kheinrich93/GestureDetector/commit/ceceac08bf50adfc840526353d935d90c94f1573))
