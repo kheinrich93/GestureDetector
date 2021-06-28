@@ -16,8 +16,8 @@ def tr_gesture_NN(dir, hp, use_pretrained_cp=False, save_cp=True):
 
     # Load images to flow
     datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-        rescale=1./SCALE_FACTOR, validation_split=VAL_SPLIT)
-
+        rescale=1./SCALE_FACTOR, validation_split=VAL_SPLIT, brightness_range=[0.2, 0.9], zoom_range=0.1, shear_range=0.1, width_shift_range=0.1, fill_mode='nearest', rotation_range=10)
+    # zoom_range=0.2,shear_range=0.2,width_shift_range=0.2,shear_range=0.2,rotation_range=20
     train_generator = tf_utils.create_generator_flow_from_dir(
         dir['asl_tr'], datagen, target_size=IMG_DIM, subset="training", color_mode=COLOR_MODE, batch_size=BATCH_SIZE, shuffle=True, class_mode='categorical')
 
@@ -42,16 +42,23 @@ def tr_gesture_NN(dir, hp, use_pretrained_cp=False, save_cp=True):
     # Output summary as txt in /summary
     tf_utils.summary_to_file(dir['summary'], model)
 
+    early_stopping_cb = tf.keras.callbacks.EarlyStopping(
+        monitor='val_accuracy', patience=3, verbose=1, restore_best_weights=True
+    )
+
+    reduce_lr_cb = tf.keras.callbacks.ReduceLROnPlateau(
+        monitor='val_accuracy', factor=0.1, patience=2, verbose=1, mode='auto', min_lr=0.00001)
+
     # Train network, can start with cp-weights
     if save_cp:
-        cp_callback, _ = tf_utils.create_cp(dir['cp_gesture'])
+        checkpoint_cb, _ = tf_utils.create_cp(dir['cp_gesture'])
 
         if use_pretrained_cp:
             path = dir['cp_gesture']
             model.load_weights(path)
 
         model.fit(train_generator, batch_size=BATCH_SIZE, epochs=EPOCHS,
-                  validation_data=val_generator, steps_per_epoch=None, verbose='auto', callbacks=[cp_callback])
+                  validation_data=val_generator, steps_per_epoch=None, verbose='auto', callbacks=[early_stopping_cb, reduce_lr_cb, checkpoint_cb])
 
     else:
         model.fit(train_generator, batch_size=BATCH_SIZE, epochs=EPOCHS,

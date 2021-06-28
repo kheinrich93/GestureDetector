@@ -82,3 +82,10 @@ def summary_to_file(dir, model):
 
 def crop_to_bb(img, offset_height, offset_width, target_height, target_width):
     return tf.image.crop_to_bounding_box(img, offset_height, offset_width, target_height, target_width)
+
+
+class privateCallback(tf.keras.callbacks.Callback):
+    def on_epoch_end(self, epoch, logs={}):
+        if(logs.get('accuracy') > 0.99):
+            print("\nReached 99%% accuracy")
+            self.model.stop_training = True
