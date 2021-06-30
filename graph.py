@@ -19,7 +19,7 @@ class Net:
 
         kernel_regularizer = None
 
-        inputs = Input(shape=(img_dim), name='input')
+        inputs = Input(shape=(None, None, 3), name='input')
 
         x1 = self.conv2D_block(inputs, filters*2, name='conv1')
         x2 = self.conv2D_block(x1, filters*2, name='conv2')
@@ -37,7 +37,9 @@ class Net:
 
         drop3 = Dropout(0.5)(x5)
 
-        flatten = Flatten()(drop3)
+        #flatten = Flatten()(drop3)
+        flatten = tf.keras.layers.GlobalAveragePooling2D()(drop3)
+
         predictions = Dense(n_classes, activation='softmax')(flatten)
 
         return Model(inputs=inputs, outputs=predictions)
