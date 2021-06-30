@@ -55,7 +55,7 @@ def prepare_img_for_predict(img, scale_factor, shape):
     if os.path.exists(img):
         img = decode_img(img)
 
-    img = img / scale_factor
+    img = tf.cast(img, tf.float32) / scale_factor
     img = tf.image.resize(img, shape)
     img = tf.expand_dims(img, axis=0)
     return img
@@ -84,7 +84,7 @@ def crop_to_bb(img, offset_height, offset_width, target_height, target_width):
     return tf.image.crop_to_bounding_box(img, offset_height, offset_width, target_height, target_width)
 
 
-class privateCallback(tf.keras.callbacks.Callback):
+class privateCallbacks(tf.keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs={}):
         if(logs.get('accuracy') > 0.99):
             print("\nReached 99%% accuracy")
