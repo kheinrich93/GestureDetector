@@ -2,53 +2,53 @@ Model: "model"
 _________________________________________________________________
 Layer (type)                 Output Shape              Param #   
 =================================================================
-input (InputLayer)           [(None, 64, 64, 3)]       0         
+input (InputLayer)           [(None, None, None, 1)]   0         
 _________________________________________________________________
-conv2d (Conv2D)              (None, 64, 64, 64)        4864      
+conv1 (Conv2D)               (None, None, None, 64)    1664      
 _________________________________________________________________
-batch_normalization (BatchNo (None, 64, 64, 64)        256       
+batch_normalization (BatchNo (None, None, None, 64)    256       
 _________________________________________________________________
-activation (Activation)      (None, 64, 64, 64)        0         
+activation (Activation)      (None, None, None, 64)    0         
 _________________________________________________________________
-conv2d_1 (Conv2D)            (None, 64, 64, 64)        102464    
+conv2 (Conv2D)               (None, None, None, 64)    102464    
 _________________________________________________________________
-batch_normalization_1 (Batch (None, 64, 64, 64)        256       
+batch_normalization_1 (Batch (None, None, None, 64)    256       
 _________________________________________________________________
-activation_1 (Activation)    (None, 64, 64, 64)        0         
+activation_1 (Activation)    (None, None, None, 64)    0         
 _________________________________________________________________
-max_pooling2d (MaxPooling2D) (None, 16, 16, 64)        0         
+max_pooling2d (MaxPooling2D) (None, None, None, 64)    0         
 _________________________________________________________________
-dropout (Dropout)            (None, 16, 16, 64)        0         
+dropout (Dropout)            (None, None, None, 64)    0         
 _________________________________________________________________
-conv2d_2 (Conv2D)            (None, 16, 16, 128)       204928    
+conv3 (Conv2D)               (None, None, None, 128)   204928    
 _________________________________________________________________
-batch_normalization_2 (Batch (None, 16, 16, 128)       512       
+batch_normalization_2 (Batch (None, None, None, 128)   512       
 _________________________________________________________________
-activation_2 (Activation)    (None, 16, 16, 128)       0         
+activation_2 (Activation)    (None, None, None, 128)   0         
 _________________________________________________________________
-conv2d_3 (Conv2D)            (None, 16, 16, 192)       614592    
+conv4 (Conv2D)               (None, None, None, 192)   614592    
 _________________________________________________________________
-batch_normalization_3 (Batch (None, 16, 16, 192)       768       
+batch_normalization_3 (Batch (None, None, None, 192)   768       
 _________________________________________________________________
-activation_3 (Activation)    (None, 16, 16, 192)       0         
+activation_3 (Activation)    (None, None, None, 192)   0         
 _________________________________________________________________
-max_pooling2d_1 (MaxPooling2 (None, 4, 4, 192)         0         
+max_pooling2d_1 (MaxPooling2 (None, None, None, 192)   0         
 _________________________________________________________________
-dropout_1 (Dropout)          (None, 4, 4, 192)         0         
+dropout_1 (Dropout)          (None, None, None, 192)   0         
 _________________________________________________________________
-conv2d_4 (Conv2D)            (None, 4, 4, 256)         1229056   
+conv5 (Conv2D)               (None, None, None, 256)   1229056   
 _________________________________________________________________
-batch_normalization_4 (Batch (None, 4, 4, 256)         1024      
+batch_normalization_4 (Batch (None, None, None, 256)   1024      
 _________________________________________________________________
-activation_4 (Activation)    (None, 4, 4, 256)         0         
+activation_4 (Activation)    (None, None, None, 256)   0         
 _________________________________________________________________
-dropout_2 (Dropout)          (None, 4, 4, 256)         0         
+dropout_2 (Dropout)          (None, None, None, 256)   0         
 _________________________________________________________________
-flatten (Flatten)            (None, 4096)              0         
+global_average_pooling2d (Gl (None, 256)               0         
 _________________________________________________________________
-dense (Dense)                (None, 29)                118813    
+dense (Dense)                (None, 7)                 1799      
 =================================================================
-Total params: 2,277,533
-Trainable params: 2,276,125
+Total params: 2,157,319
+Trainable params: 2,155,911
 Non-trainable params: 1,408
 _________________________________________________________________

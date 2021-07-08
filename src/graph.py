@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Dense, Dropout, Flatten, BatchNormalization, Activation
-from keras import Sequential
+from keras import Sequential, optimizers
 from tensorflow.keras.models import Model
 
 
@@ -14,12 +14,12 @@ class Net:
         x = Activation('relu')(x)
         return x
 
-    def get_model(self, img_dim, n_classes):
+    def get_model(self, n_classes):
         filters = 32
 
         kernel_regularizer = None
 
-        inputs = Input(shape=(img_dim[0], img_dim[1], 3), name='input')
+        inputs = Input(shape=(None, None, 1), name='input')
 
         x1 = self.conv2D_block(inputs, filters*2, name='conv1')
         x2 = self.conv2D_block(x1, filters*2, name='conv2')
@@ -37,7 +37,9 @@ class Net:
 
         drop3 = Dropout(0.5)(x5)
 
-        flatten = Flatten()(drop3)
+        #flatten = Flatten()(drop3)
+        flatten = tf.keras.layers.GlobalAveragePooling2D()(drop3)
+
         predictions = Dense(n_classes, activation='softmax')(flatten)
 
         return Model(inputs=inputs, outputs=predictions)
@@ -70,7 +72,7 @@ def create_exp_model(hp):
 
     hp_learning_rate = hp.Choice('learning_rate', values=[1e-2, 1e-3, 1e-4])
 
-    model.compile(optimizer=keras.optimizers.Adam(learning_rate=hp_learning_rate),
+    model.compile(optimizer=optimizers.Adam(learning_rate=hp_learning_rate),
                   loss=tf.losses.CategoricalCrossentropy(),
                   metrics=['accuracy'])
 

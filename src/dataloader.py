@@ -1,6 +1,8 @@
 import os
-import numpy as np
 import tensorflow as tf
+import pandas as pd
+import numpy as np
+
 import src.img_utils as img_utils
 
 
@@ -51,3 +53,46 @@ def read_images(dir, max_examples):
     labels = np.array(labels).astype("int32")
 
     return img_path, labels
+
+
+def load_mnist_csv(dirs, hp):
+    LETTERS = hp.letters
+    VAL_SPLIT = hp.val_split
+
+    train_df = pd.read_csv(dirs['mnist_tr']+'/sign_mnist_train.csv')
+
+    # creates categorical int labels
+    letters = ['A', 'B', 'C', 'H', 'K', 'L', 'O']
+    letters = [letter.lower() for letter in LETTERS]
+    letter_2_number = [ord(char) - 97 for char in letters]
+
+    # remove unused letters
+    mask = train_df['label'].isin(letter_2_number)
+    train_df = train_df[mask]
+
+    # shuffle
+    train_df = train_df.sample(frac=1.0).reset_index(drop=True)
+
+    # Split into training, test and validation sets
+    val_index = int(train_df.shape[0]*VAL_SPLIT)
+
+    train_df_original = train_df.copy()
+
+    train_df = train_df_original.iloc[val_index:]
+    val_df = train_df_original.iloc[:val_index]
+
+    # Create labels for training and validation set
+    y_train = train_df['label']
+    y_train = pd.CategoricalIndex(y_train).codes
+    y_val = val_df['label']
+    y_val = pd.CategoricalIndex(y_val).codes
+
+    # Reshape the training and test set to use them with a generator
+    X_train = train_df.drop('label', axis=1).values.reshape(
+        train_df.shape[0], 28, 28, 1)
+    X_val = val_df.drop('label', axis=1).values.reshape(
+        val_df.shape[0], 28, 28, 1)
+
+    print(X_train.shape, X_val.shape)
+
+    return X_train, y_train, X_val, y_val

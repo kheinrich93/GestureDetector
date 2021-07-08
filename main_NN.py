@@ -1,17 +1,19 @@
-import src.utils as utils
 from train_NN import tr_gesture_NN
-from predict import predict
+import src.utils as utils
+from src.predict import predict_from_dir
 from hp_tuner import find_opt_hp
 from hp.hyperparams import hyperparams
 
 # set dirs hierarchy in dict
 dir = utils.get_dirs()
 
+# load hyperparams
 hp = hyperparams()
 
 # train Gesture CNN
 if hp.train_network:
-    tr_gesture_NN(dir, hp, use_pretrained_cp=False, save_cp=True)
+    tr_gesture_NN(dir, hp, use_pretrained_cp=False,
+                  save_cp=False, dataset='asl')
 
 # find optimal hyperparams
 if hp.tune_hp:
@@ -19,4 +21,4 @@ if hp.tune_hp:
 
 # test Gesture CNN
 if hp.predict:
-    predict(dir, hp)
+    predict_from_dir(dir, hp)

@@ -1,5 +1,7 @@
-import tensorflow as tf
 import os.path
+import tensorflow as tf
+import pandas as pd
+import matplotlib.pyplot as plt
 
 
 def create_dataset(images, labels, split=0.2):
@@ -51,8 +53,11 @@ def decode_img(img_path):
     return img
 
 
-def prepare_img_for_predict(img_path, SCALE_FACTOR, shape):
-    img = decode_img(img_path)/SCALE_FACTOR
+def prepare_img_for_predict(img, scale_factor, shape):
+    if os.path.exists(img):
+        img = decode_img(img)
+
+    img = tf.cast(img, tf.float32) / scale_factor
     img = tf.image.resize(img, shape)
     img = tf.expand_dims(img, axis=0)
     return img
@@ -75,3 +80,27 @@ def summary_to_file(dir, model):
     with open(dir + '/report.txt', 'w') as fh:
         # Pass the file handle in as a lambda function to make it callable
         model.summary(print_fn=lambda x: fh.write(x + '\n'))
+
+
+def crop_to_bb(img, offset_height, offset_width, target_height, target_width):
+    return tf.image.crop_to_bounding_box(img, offset_height, offset_width, target_height, target_width)
+
+
+def visualize_results(history):
+    fig, axes = plt.subplots(2, 1, figsize=(15, 10))
+    ax = axes.flat
+
+    pd.DataFrame(history.history)[['accuracy', 'val_accuracy']].plot(ax=ax[0])
+    ax[0].set_title("Accuracy", fontsize=15)
+    ax[0].set_ylim(0, 1.1)
+
+    pd.DataFrame(history.history)[['loss', 'val_loss']].plot(ax=ax[1])
+    ax[1].set_title("Loss", fontsize=15)
+    plt.show()
+
+
+class privateCallbacks(tf.keras.callbacks.Callback):
+    def on_epoch_end(self, epoch, logs={}):
+        if(logs.get('accuracy') > 0.99):
+            print("\nReached 99%% accuracy")
+            self.model.stop_training = True

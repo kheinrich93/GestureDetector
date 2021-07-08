@@ -1,52 +1,51 @@
 import tensorflow as tf
-from tensorflow import keras
-import graph
-import src.tf_utils as tf_utils
-import os
+
+from src.tf_utils import visualize_results, summary_to_file, create_cp, create_generator_flow_from_dir
+from src.dataloader import load_mnist_csv
+from src.train import train
 
 
-def tr_gesture_NN(dir, hp, use_pretrained_cp=False, save_cp=True):
+def tr_gesture_NN(dirs, hp, use_pretrained_cp=False, save_cp=False, dataset='mnist'):
     # hyperparams
-    N_CLASSES = hp.n_classes
     IMG_DIM = hp.input_dim
     BATCH_SIZE = hp.batch_size
     VAL_SPLIT = hp.val_split
-    EPOCHS = hp.epochs
     SCALE_FACTOR = hp.scale_factor
+    COLOR_MODE = hp.color_mode
 
-    # Load images to flow
-    datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-        rescale=1./SCALE_FACTOR, validation_split=VAL_SPLIT)
+    # Create generators of dataset for training
+    if dataset == 'mnist':
+        X_train, y_train, X_val, y_val = load_mnist_csv(dirs, hp)
 
-    train_generator = tf_utils.create_generator_flow_from_dir(
-        dir['asl_tr'], datagen, target_size=IMG_DIM, subset="training", color_mode="rgb", batch_size=BATCH_SIZE, shuffle=True, class_mode='categorical')
+        datagen = tf.keras.preprocessing.image.ImageDataGenerator(
+            rescale=1./SCALE_FACTOR, zoom_range=0.1, shear_range=0.1, fill_mode='nearest', rotation_range=10)
 
-    val_generator = tf_utils.create_generator_flow_from_dir(
-        dir['asl_tr'], datagen, target_size=IMG_DIM, subset="validation", color_mode="rgb", batch_size=BATCH_SIZE, shuffle=True, class_mode='categorical')
+        train_generator = datagen.flow(X_train, y_train, batch_size=BATCH_SIZE)
+        val_generator = datagen.flow(X_val, y_val, batch_size=BATCH_SIZE)
 
-    # Create and compile model
-    model = graph.Net().get_model(IMG_DIM, N_CLASSES)
+        loss = tf.keras.losses.SparseCategoricalCrossentropy()
 
-    opt = tf.keras.optimizers.Adam()
-    model.compile(
-        optimizer=opt,
-        loss=tf.losses.CategoricalCrossentropy(),
-        metrics=['accuracy'])
+    elif dataset == 'asl':
 
-    # Output summary as txt in /summary
-    tf_utils.summary_to_file(dir['summary'], model)
+        tr_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
+            rescale=1./SCALE_FACTOR, validation_split=VAL_SPLIT, zoom_range=0.1, shear_range=0.1, width_shift_range=0.1, fill_mode='nearest', rotation_range=10)
 
-    # Train network, can start with cp-weights
-    if save_cp:
-        cp_callback, cp_dir = tf_utils.create_cp(dir['cp_gesture'])
+        val_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
+            rescale=1./SCALE_FACTOR, validation_split=VAL_SPLIT)
 
-        if use_pretrained_cp:
-            path = dir['cp_gesture']
-            model.load_weights(path)
+        train_generator = create_generator_flow_from_dir(
+            dirs['asl_tr'], tr_datagen, target_size=IMG_DIM, subset="training", color_mode=COLOR_MODE, batch_size=BATCH_SIZE, shuffle=True, class_mode='categorical')
 
-        model.fit(train_generator, batch_size=BATCH_SIZE, epochs=EPOCHS,
-                  validation_data=val_generator, steps_per_epoch=None, verbose='auto', callbacks=[cp_callback])
+        val_generator = create_generator_flow_from_dir(
+            dirs['asl_tr'], val_datagen, target_size=IMG_DIM, subset="validation", color_mode=COLOR_MODE, batch_size=BATCH_SIZE, shuffle=True, class_mode='categorical')
 
+        loss = tf.keras.losses.CategoricalCrossentropy()
     else:
-        model.fit(train_generator, batch_size=BATCH_SIZE, epochs=EPOCHS,
-                  validation_data=val_generator, steps_per_epoch=100, verbose='auto')
+        raise SystemExit('Dataset %s not directory ' % dataset)
+
+    # Train network
+    history = train(dirs, hp, save_cp, use_pretrained_cp,
+                    train_generator, val_generator, loss=loss)
+
+    # Show accuracy, loss plot
+    visualize_results(history)
