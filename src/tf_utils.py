@@ -1,5 +1,7 @@
-import tensorflow as tf
 import os.path
+import tensorflow as tf
+import pandas as pd
+import matplotlib.pyplot as plt
 
 
 def create_dataset(images, labels, split=0.2):
@@ -82,6 +84,19 @@ def summary_to_file(dir, model):
 
 def crop_to_bb(img, offset_height, offset_width, target_height, target_width):
     return tf.image.crop_to_bounding_box(img, offset_height, offset_width, target_height, target_width)
+
+
+def visualize_results(history):
+    fig, axes = plt.subplots(2, 1, figsize=(15, 10))
+    ax = axes.flat
+
+    pd.DataFrame(history.history)[['accuracy', 'val_accuracy']].plot(ax=ax[0])
+    ax[0].set_title("Accuracy", fontsize=15)
+    ax[0].set_ylim(0, 1.1)
+
+    pd.DataFrame(history.history)[['loss', 'val_loss']].plot(ax=ax[1])
+    ax[1].set_title("Loss", fontsize=15)
+    plt.show()
 
 
 class privateCallbacks(tf.keras.callbacks.Callback):
