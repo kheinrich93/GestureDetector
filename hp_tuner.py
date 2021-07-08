@@ -1,5 +1,5 @@
 import tensorflow as tf
-import graph
+from src.graph import Net
 import src.tf_utils as tf_utils
 
 import kerastuner as kt
@@ -22,7 +22,7 @@ def find_opt_hp(dir, batch_size):
     val_generator = tf_utils.create_generator_flow_from_dir(
         dir['asl_tr'], datagen, img_dim, subset="validation", color_mode="rgb", batch_size=BATCH_SIZE, shuffle=True, class_mode='categorical')
 
-    tuner = kt.Hyperband(graph.create_exp_model,
+    tuner = kt.Hyperband(Net.create_exp_model,
                          objective='val_accuracy',
                          max_epochs=EPOCHS,
                          directory='hp_results',
