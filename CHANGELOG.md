@@ -2,6 +2,35 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.0 (2021-07-08)
+### Feature
+* Added dataset dependant training selection ([`ef0eebf`](https://github.com/kheinrich93/GestureDetector/commit/ef0eebf4a1e2932b0feeee736f64ab41b8c2c2f7))
+* Added visualization of training history ([`4248e88`](https://github.com/kheinrich93/GestureDetector/commit/4248e88b3227b573db7c12d31c66a3a9e332c772))
+* Added letters to hp ([`e537cdc`](https://github.com/kheinrich93/GestureDetector/commit/e537cdcd6001869974fcdf527db10c93f0061544))
+* Added cam prediction ([`8435ada`](https://github.com/kheinrich93/GestureDetector/commit/8435ada07b4ed6ec476a69744a735646ac6d6da6))
+* Started addition of new dataset ([`2c18c4a`](https://github.com/kheinrich93/GestureDetector/commit/2c18c4a2e2fbc909b57b48cfd5fbbb7278731ef0))
+* Added csv reader ([`3e78f80`](https://github.com/kheinrich93/GestureDetector/commit/3e78f8003b934dee0b8ee8c8d52126f099527e32))
+* Added variable shape input ([`860b1eb`](https://github.com/kheinrich93/GestureDetector/commit/860b1eb092eed543365f2d0c1e4b0c9c3dcfbe93))
+* Increased robust with augment and callbacks ([`5d273ce`](https://github.com/kheinrich93/GestureDetector/commit/5d273cebd9f7cd77d6e0e9096c38ce5eff65c024))
+* Set cam input ([`05c5dce`](https://github.com/kheinrich93/GestureDetector/commit/05c5dcedd102cf74549ccb14a9e385b97514593c))
+* Started cam demo implimentation ([`81c2c09`](https://github.com/kheinrich93/GestureDetector/commit/81c2c09fed663a1fae5d12d470cbb4e59ef3444d))
+* Added prediction of image ([`443d813`](https://github.com/kheinrich93/GestureDetector/commit/443d813dff12da645b5e909c68ccba3a16244e6a))
+* Added hyperparam support ([`bf510b0`](https://github.com/kheinrich93/GestureDetector/commit/bf510b02a75e0472c7c77325bba8668ad1553973))
+* Added hyperparam file ([`dfbbbc5`](https://github.com/kheinrich93/GestureDetector/commit/dfbbbc53c64450d47b3032798343b514775683b9))
+* Set more accurate network arch ([`2ac257d`](https://github.com/kheinrich93/GestureDetector/commit/2ac257d8716e8a28c5c358c476d164e2bb924e7e))
+* Implemented test of image ([`262f416`](https://github.com/kheinrich93/GestureDetector/commit/262f416fc6588463d2fab442d22111faab68fb25))
+* Added func model ([`b96f94e`](https://github.com/kheinrich93/GestureDetector/commit/b96f94e37352b0c238f23aa1a05cfb8eb8224666))
+* Established adaptable model architecture ([`dd05025`](https://github.com/kheinrich93/GestureDetector/commit/dd0502547af7f05a462fe8f9d5b67902b1b8c863))
+* Added file export of model ([`28c9166`](https://github.com/kheinrich93/GestureDetector/commit/28c91668ae970ba7db83f8bdf5b4fca6da876368))
+* Added experimental structure ([`21ac762`](https://github.com/kheinrich93/GestureDetector/commit/21ac7626931db34dd0dc8102e54b2d6931cad1fc))
+
+### Fix
+* Corrected pathing and import ([`21d2257`](https://github.com/kheinrich93/GestureDetector/commit/21d225709567004c41766aa7e4e77b8c13c76e4d))
+* Fixed datatype in prepare_img ([`04976dc`](https://github.com/kheinrich93/GestureDetector/commit/04976dc719624f88d1650073c74b00176daaa4b6))
+* Changed crop extraction ([`44b6355`](https://github.com/kheinrich93/GestureDetector/commit/44b6355637e9204e0e60e49686958989b5d44eeb))
+* Set better prediction structure ([`783b32b`](https://github.com/kheinrich93/GestureDetector/commit/783b32b561658f59c08ba1953c139498e7d3de37))
+* Corrected training workflow ([`10ee2ff`](https://github.com/kheinrich93/GestureDetector/commit/10ee2ff987f5fe9dd14dfa9a22fc58a3216599f6))
+
 ## v0.6.0 (2021-06-27)
 ### Feature
 * Set hp-tuner ([`7915c5c`](https://github.com/kheinrich93/GestureDetector/commit/7915c5c8b0ffbbb5152a70c69961fa764261cdc3))
