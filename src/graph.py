@@ -4,7 +4,7 @@ from keras import Sequential, optimizers
 from tensorflow.keras.models import Model
 
 
-class Net:
+class Net():
 
     @staticmethod
     def conv2D_block(x, filters, kernel_size=5, kernel_regularizer=None, name=''):
