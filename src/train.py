@@ -5,7 +5,7 @@ from src.graph import Net
 from src.tf_utils import summary_to_file, create_cp
 
 
-def train(dirs, hp, save_cp, use_pretrained_cp, train_generator, val_generator, loss):
+def train(dirs, hp, save_cp, save_weights_as, use_pretrained_cp, train_generator, val_generator, loss):
     N_CLASSES = hp.n_classes
     EPOCHS = hp.epochs
 
@@ -32,7 +32,7 @@ def train(dirs, hp, save_cp, use_pretrained_cp, train_generator, val_generator, 
         checkpoint_cb, _ = create_cp(dirs['cp_gesture'])
 
         if use_pretrained_cp:
-            path = os.path.join(dirs['cp'], 'cp_gesture_7n', 'gestureNN')
+            path = os.path.join(dirs['cp'], save_weights_as, 'gestureNN')
             model.load_weights(path)
 
         history = model.fit(train_generator, epochs=EPOCHS, validation_data=val_generator,

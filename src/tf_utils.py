@@ -98,7 +98,6 @@ def visualize_results(history):
     ax[1].set_title("Loss", fontsize=15)
     plt.show()
 
-
 class privateCallbacks(tf.keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs={}):
         if(logs.get('accuracy') > 0.99):

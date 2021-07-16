@@ -7,9 +7,10 @@ class hyperparams:
         self.val_split = 0.2
         self.scale_factor = 255.0
         self.color_mode = 'grayscale'  # grayscale or rgb
+        self.training_shuffle = True
 
-        self.train_network = True
-        self.predict = False
+        self.train_network = False
+        self.test_network = True
         self.tune_hp = False
 
         # considered letters for mnist

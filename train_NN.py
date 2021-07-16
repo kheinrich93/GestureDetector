@@ -1,11 +1,11 @@
 import tensorflow as tf
 
-from src.tf_utils import visualize_results, summary_to_file, create_cp, create_generator_flow_from_dir
-from src.dataloader import load_mnist_csv
+from src.tf_utils import visualize_results, create_generator_flow_from_dir
+from src.dataloader import mnist_data
 from src.train import train
 
 
-def tr_gesture_NN(dirs, hp, use_pretrained_cp=False, save_cp=False, dataset='mnist'):
+def tr_gesture_NN(dirs, hp, use_pretrained_cp=False, save_weights_as='gestureWeights', save_cp=False, dataset='mnist'):
     # hyperparams
     IMG_DIM = hp.input_dim
     BATCH_SIZE = hp.batch_size
@@ -15,7 +15,10 @@ def tr_gesture_NN(dirs, hp, use_pretrained_cp=False, save_cp=False, dataset='mni
 
     # Create generators of dataset for training
     if dataset == 'mnist':
-        X_train, y_train, X_val, y_val = load_mnist_csv(dirs, hp)
+
+        path = dirs['mnist_tr']+'/sign_mnist_train.csv'
+
+        X_train, y_train, X_val, y_val = mnist_data(path).training(hp)
 
         datagen = tf.keras.preprocessing.image.ImageDataGenerator(
             rescale=1./SCALE_FACTOR, zoom_range=0.1, shear_range=0.1, fill_mode='nearest', rotation_range=10)
@@ -23,6 +26,7 @@ def tr_gesture_NN(dirs, hp, use_pretrained_cp=False, save_cp=False, dataset='mni
         train_generator = datagen.flow(X_train, y_train, batch_size=BATCH_SIZE)
         val_generator = datagen.flow(X_val, y_val, batch_size=BATCH_SIZE)
 
+        # label not one hot encoded so sparse
         loss = tf.keras.losses.SparseCategoricalCrossentropy()
 
     elif dataset == 'asl':
@@ -44,7 +48,7 @@ def tr_gesture_NN(dirs, hp, use_pretrained_cp=False, save_cp=False, dataset='mni
         raise SystemExit('Dataset %s not directory ' % dataset)
 
     # Train network
-    history = train(dirs, hp, save_cp, use_pretrained_cp,
+    history = train(dirs, hp, save_cp, save_weights_as, use_pretrained_cp,
                     train_generator, val_generator, loss=loss)
 
     # Show accuracy, loss plot
