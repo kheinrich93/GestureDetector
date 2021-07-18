@@ -30,3 +30,4 @@ class error_msgs:
     val_split_value_not_valid = 'Val split value is not valid, must be between 0 and 1'
     not_letter = 'Input does not only contain letters'
     dataset_not_dir = 'Dataset is not a directory'
+    dim_mismatch = 'Dimension of array is mismatched'

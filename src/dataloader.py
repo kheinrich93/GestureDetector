@@ -39,9 +39,9 @@ class mnist_data:
         X_train = reshape_mnist_to_img(train_df)
         X_val = reshape_mnist_to_img(val_df)
 
-        # Test shape of train and val
-        assert X_train.shape[0] == y_train.shape[0], "Row numbers of X and y data must be identical"
-        assert X_val.shape[0] == y_val.shape[0], "Row numbers of X and y data must be identical"
+        # Checks if correct number of labels are available
+        X_train, y_train = check_x_to_label_dim(X_train, y_train)
+        X_val, y_val = check_x_to_label_dim(X_val, y_val)
 
         return X_train, y_train, X_val, y_val
 

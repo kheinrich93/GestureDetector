@@ -9,8 +9,8 @@ class hyperparams:
         self.color_mode = 'grayscale'  # grayscale or rgb
         self.training_shuffle = True
 
-        self.train_network = 1
-        self.test_network = 0
+        self.train_network = 0
+        self.test_network = 1
         self.tune_hp = 0
 
         # considered letters for mnist

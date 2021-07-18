@@ -62,3 +62,4 @@ def te_gesture_NN(dirs: dict, hp: hyperparams, dataset: str, model_weights: str)
 
     # Accuracy score
     acc = accuracy_score(y_test, pred)
+    print('Accuracy: ', acc)

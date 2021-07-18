@@ -141,3 +141,6 @@ res/testing/my_data
 
 # hp-tuning
 hp/hp_tuner
+
+# dbg
+mun.py
