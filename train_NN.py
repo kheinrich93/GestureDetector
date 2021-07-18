@@ -4,8 +4,13 @@ from src.tf_utils import visualize_results, create_generator_flow_from_dir
 from src.dataloader import mnist_data
 from src.train import train
 
+from src.helper_check import check_path
+from src.utils import error_msgs
 
-def tr_gesture_NN(dirs, hp, use_pretrained_cp=False, save_weights_as='gestureWeights', save_cp=False, dataset='mnist'):
+from hp.hyperparams import hyperparams
+
+
+def tr_gesture_NN(dirs: dict, hp: hyperparams, use_pretrained_cp: bool = False, save_weights_as: str = 'gestureWeights', save_cp: bool = False, dataset: str = 'mnist') -> str:
     # hyperparams
     IMG_DIM = hp.input_dim
     BATCH_SIZE = hp.batch_size
@@ -16,7 +21,7 @@ def tr_gesture_NN(dirs, hp, use_pretrained_cp=False, save_weights_as='gestureWei
     # Create generators of dataset for training
     if dataset == 'mnist':
 
-        path = dirs['mnist_tr']+'/sign_mnist_train.csv'
+        path = check_path(dirs['mnist_tr']+'/sign_mnist_train.csv')
 
         X_train, y_train, X_val, y_val = mnist_data(path).training(hp)
 
@@ -45,11 +50,14 @@ def tr_gesture_NN(dirs, hp, use_pretrained_cp=False, save_weights_as='gestureWei
 
         loss = tf.keras.losses.CategoricalCrossentropy()
     else:
-        raise SystemExit('Dataset %s not directory ' % dataset)
+        raise SystemExit(error_msgs.dataset_not_dir)
 
     # Train network
+    # test types, filename is string, hp val split okay, x_train = y_train und val
     history = train(dirs, hp, save_cp, save_weights_as, use_pretrained_cp,
                     train_generator, val_generator, loss=loss)
 
     # Show accuracy, loss plot
     visualize_results(history)
+
+    return 'Training successful'

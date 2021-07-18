@@ -3,13 +3,15 @@ import tensorflow as tf
 
 from src.graph import Net
 from src.tf_utils import summary_to_file, create_cp
+from hp.hyperparams import hyperparams
+from keras.callbacks import History
 
 
-def train(dirs, hp, save_cp, save_weights_as, use_pretrained_cp, train_generator, val_generator, loss):
+def train(dirs: dict, hp: hyperparams, save_cp: bool, save_weights_as: str, use_pretrained_cp: bool, train_generator: any, val_generator: any, loss: any) -> History:
     N_CLASSES = hp.n_classes
     EPOCHS = hp.epochs
 
-    model = Net().get_model(N_CLASSES)
+    model = Net().gestureNN(N_CLASSES)
 
     opt = tf.keras.optimizers.Adam()
     model.compile(

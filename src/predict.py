@@ -1,8 +1,10 @@
-from src.graph import Net
 import numpy as np
 
+from hp.hyperparams import hyperparams
+from src.graph import Net
 
-def predict(hp, samples, weights_path):
+
+def predict(hp: hyperparams, samples: any, weights_path: str) -> None:
     N_CLASSES = hp.n_classes
     LABELS = hp.letters
 

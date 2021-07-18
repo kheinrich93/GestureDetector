@@ -132,10 +132,12 @@ dmypy.json
 .vscode/
 
 # training and testing data
-res/
+res/training
+res/testing/asl
+res/testing/my_data
 
 # checkpoints
-cp/
+# cp/
 
 # hp-tuning
 hp/hp_tuner

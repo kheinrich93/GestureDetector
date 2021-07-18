@@ -1,16 +1,19 @@
-import os
-import tensorflow as tf
+from typing import Tuple
+
 import pandas as pd
 import numpy as np
 
+from hp.hyperparams import hyperparams
+from src.helper_check import *
 
-class mnist_data():
-    def __init__(self, path):
-        self.csv_df = pd.read_csv(path)
 
-    def training(self, hp):
-        LETTERS = hp.letters
-        VAL_SPLIT = hp.val_split
+class mnist_data:
+    def __init__(self, path: str):
+        self.csv_df = pd.read_csv(check_path(path))
+
+    def training(self, hp: hyperparams) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+        LETTERS = check_letters(hp.letters)
+        VAL_SPLIT = check_val_split(hp.val_split)
         SHUFFLE = hp.training_shuffle
 
         # creates sparse categorical int labels
@@ -36,16 +39,20 @@ class mnist_data():
         X_train = reshape_mnist_to_img(train_df)
         X_val = reshape_mnist_to_img(val_df)
 
+        # Test shape of train and val
+        assert X_train.shape[0] == y_train.shape[0], "Row numbers of X and y data must be identical"
+        assert X_val.shape[0] == y_val.shape[0], "Row numbers of X and y data must be identical"
+
         return X_train, y_train, X_val, y_val
 
-    def testing(self, hp):
-        LETTERS = hp.letters
+    def testing(self, hp: hyperparams) -> Tuple[np.ndarray, np.ndarray]:
+        LETTERS = check_letters(hp.letters)
 
-        # creates sparse categorical int labels
+        # Creates sparse categorical int labels
         letters = [letter.lower() for letter in LETTERS]
         letter_2_number = [ord(char) - 97 for char in letters]
 
-        # remove unused letters
+        # Remove unused letters
         mask = self.csv_df['label'].isin(letter_2_number)
         test_df = self.csv_df[mask]
 
@@ -54,44 +61,23 @@ class mnist_data():
 
         return X_test, y_test
 
-    def predict(self):
+    def predict(self) -> np.ndarray:
         X_predict = reshape_mnist_to_img(self.csv_df)
         return X_predict
 
 
-def create_label(df):
-    labels = df['label']
-    return pd.CategoricalIndex(labels).codes
+def create_label(df: pd.DataFrame) -> pd.DataFrame:
+    return pd.CategoricalIndex(df['label']).codes
 
 
-def reshape_mnist_to_img(df):
+def reshape_mnist_to_img(df: pd.DataFrame) -> pd.DataFrame:
     return df.drop('label', axis=1).values.reshape(df.shape[0], 28, 28, 1)
 
 
-def val_split_df(df, val_split):
+def val_split_df(df: pd.DataFrame, val_split: float) -> Tuple[np.ndarray, np.ndarray]:
     val_index = int(df.shape[0]*val_split)
 
     train_df = df.iloc[val_index:]
     val_df = df.iloc[:val_index]
 
     return train_df, val_df
-
-
-def read_images(dir, max_examples):
-    img_path = []
-    labels = []
-
-    for idx, label in enumerate(os.listdir(dir)):
-        print("Loading data from", label)
-        for idimg, imgs in enumerate(os.listdir(os.path.join(dir, label))):
-            if idimg < max_examples:
-                path = os.path.join(dir, label, imgs)
-                img_path.append(path)
-                labels.append(idx)
-            else:
-                break
-
-    images = np.array(img_path)
-    labels = np.array(labels).astype("int32")
-
-    return img_path, labels

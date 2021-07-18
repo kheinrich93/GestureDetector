@@ -2,8 +2,8 @@ import os
 
 import tensorflow as tf
 import numpy as np
-import matplotlib.pyplot as plt
 
+from hp.hyperparams import hyperparams
 from src.img_utils import show_sample
 from src.dataloader import mnist_data
 from src.graph import Net
@@ -11,13 +11,14 @@ from src.graph import Net
 from sklearn.metrics import accuracy_score
 
 
-def te_gesture_NN(dirs, hp, dataset, model_weights):
+def te_gesture_NN(dirs: dict, hp: hyperparams, dataset: str, model_weights: str) -> None:
     N_CLASSES = hp.n_classes
 
     # load dataset
     SCALE_FACTOR = hp.scale_factor
 
     if dataset == 'mnist':
+        # test path
         path = dirs['mnist_te']+'/sign_mnist_test.csv'
 
         X_test, y_test = mnist_data(path).testing(hp)
@@ -33,12 +34,12 @@ def te_gesture_NN(dirs, hp, dataset, model_weights):
         # preprocess to gray
         pass
 
-    #sample = X_test[1, :, :, :]
+    # sample = X_test[1, :, :, :]
 
     weights_path = os.path.join(dirs['cp'], model_weights, 'gestureNN')
 
     # Setup network
-    model = Net().get_model(N_CLASSES)
+    model = Net().gestureNN(N_CLASSES)
 
     # Load weights from pre-trained network
     model.load_weights(weights_path).expect_partial()
@@ -61,4 +62,3 @@ def te_gesture_NN(dirs, hp, dataset, model_weights):
 
     # Accuracy score
     acc = accuracy_score(y_test, pred)
-    pass

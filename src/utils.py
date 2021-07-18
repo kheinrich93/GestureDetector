@@ -1,9 +1,7 @@
 import os.path
-import numpy as np
-import csv
 
 
-def get_dirs():
+def get_dirs() -> dict:
     project = os.getcwd()
     res = os.path.join(project, 'res')
     cp = os.path.join(project, 'cp')
@@ -27,22 +25,8 @@ def get_dirs():
     return dir_dict
 
 
-def get_imgdata_from_csv(filename):
-    with open(filename) as training_file:
-        reader = csv.reader(training_file, delimiter=',')
-        imgs = []
-        labels = []
-
-        next(reader, None)
-
-        for row in reader:
-            label = row[0]
-            data = row[1:]
-            img = np.array(data).reshape((28, 28))
-
-            imgs.append(img)
-            labels.append(label)
-
-        images = np.array(imgs).astype(float)
-        labels = np.array(labels).astype(float)
-    return images, labels
+class error_msgs:
+    dir_not_existing = 'Directory does not exist'
+    val_split_value_not_valid = 'Val split value is not valid, must be between 0 and 1'
+    not_letter = 'Input does not only contain letters'
+    dataset_not_dir = 'Dataset is not a directory'

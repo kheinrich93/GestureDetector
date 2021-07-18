@@ -4,7 +4,7 @@ from keras import Sequential, optimizers
 from tensorflow.keras.models import Model
 
 
-class Net():
+class Net:
 
     @staticmethod
     def conv2D_block(x, filters, kernel_size=5, kernel_regularizer=None, name=''):
@@ -14,7 +14,7 @@ class Net():
         x = Activation('relu')(x)
         return x
 
-    def get_model(self, n_classes):
+    def gestureNN(self, n_classes):
         filters = 32
 
         kernel_regularizer = None

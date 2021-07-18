@@ -2,6 +2,7 @@ import os.path
 import tensorflow as tf
 import pandas as pd
 import matplotlib.pyplot as plt
+from keras.callbacks import History
 
 
 def create_dataset(images, labels, split=0.2):
@@ -86,7 +87,7 @@ def crop_to_bb(img, offset_height, offset_width, target_height, target_width):
     return tf.image.crop_to_bounding_box(img, offset_height, offset_width, target_height, target_width)
 
 
-def visualize_results(history):
+def visualize_results(history: History) -> None:
     fig, axes = plt.subplots(2, 1, figsize=(15, 10))
     ax = axes.flat
 
@@ -97,6 +98,7 @@ def visualize_results(history):
     pd.DataFrame(history.history)[['loss', 'val_loss']].plot(ax=ax[1])
     ax[1].set_title("Loss", fontsize=15)
     plt.show()
+
 
 class privateCallbacks(tf.keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs={}):

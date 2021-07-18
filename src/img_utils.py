@@ -1,9 +1,13 @@
 import os.path
-from cv2 import imshow, waitKey, imread, IMREAD_COLOR, rectangle, resize, INTER_AREA, cvtColor, COLOR_BGR2GRAY, namedWindow, resizeWindow, WINDOW_NORMAL
+from cv2 import imshow, waitKey, imread, cvtColor, rectangle, resize, INTER_AREA, COLOR_BGR2GRAY, namedWindow, resizeWindow, WINDOW_NORMAL
 import numpy as np
 
+from typing import Tuple
 
-def show_sample(sample):
+from src.helper_check import check_path
+
+
+def show_sample(sample) -> None:
 
     if sample.ndim == 4:
         #sample = sample.numpy()
@@ -14,20 +18,14 @@ def show_sample(sample):
 
     imshow("Display window", sample)
     k = waitKey(0)
-    return ("displayed image")
 
 
 def read_image(img_path):
-
-    if os.path.isfile(img_path):
-        img = imread(img_path, IMREAD_COLOR)
-    else:
-        raise SystemExit('Unable to open %s' % img_path)
-    return img
+    return imread(check_path(img_path))
 
 
-def to_grayscale(img_path):
-    gray = cv2.cvtColor(img_path, cv2.COLOR_BGR2GRAY)
+def to_grayscale(img):
+    gray = cvtColor(img, COLOR_BGR2GRAY)
 
     return gray
 
@@ -41,7 +39,7 @@ def resize_image_to_percent(img, scale_percent=60):
     return resize(img, dim, interpolation=INTER_AREA)
 
 
-def resize_image_to_size(img, dim=(200, 200)):
+def resize_image_to_size(img, dim: Tuple[int, int] = (200, 200)):
 
     return resize(img, dim)
 
