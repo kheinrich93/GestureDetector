@@ -2,6 +2,17 @@
 
 <!--next-version-placeholder-->
 
+## v0.8.0 (2021-07-28)
+### Feature
+* Added test for NN accuracy and hyperparams ([`2832c0a`](https://github.com/kheinrich93/GestureDetector/commit/2832c0ab66851b3dbdcb31037d771f9bb63534e3))
+* Set up testing suite ([`4e997c9`](https://github.com/kheinrich93/GestureDetector/commit/4e997c919fd102952f50ec7a79ffa2ea7fd417dc))
+* Added func type checking ([`624bc26`](https://github.com/kheinrich93/GestureDetector/commit/624bc260d863db6c4b450df01a9470dfedd52777))
+* Added mnist testing/evaluation ([`b1548e3`](https://github.com/kheinrich93/GestureDetector/commit/b1548e3636b39d1b61f874caf8ba95850eff1f6f))
+
+### Fix
+* Added pandas to requirements ([`2d93dce`](https://github.com/kheinrich93/GestureDetector/commit/2d93dce76380d2ca43e39f40d9212f16bab4bdc4))
+* Added correct dependencies ([`422c94c`](https://github.com/kheinrich93/GestureDetector/commit/422c94c071716209ac519131a76ff3e6ecc9c2a4))
+
 ## v0.7.0 (2021-07-08)
 ### Feature
 * Added dataset dependant training selection ([`ef0eebf`](https://github.com/kheinrich93/GestureDetector/commit/ef0eebf4a1e2932b0feeee736f64ab41b8c2c2f7))
