@@ -31,3 +31,4 @@ class error_msgs:
     not_letter = 'Input does not only contain letters'
     dataset_not_dir = 'Dataset is not a directory'
     dim_mismatch = 'Dimension of array is mismatched'
+    not_a_valid_scale_factor = 'Scale factor is either to high or too low'
