@@ -3,8 +3,25 @@ from typing import Tuple
 import pandas as pd
 import numpy as np
 
+from tensorflow.keras.losses import SparseCategoricalCrossentropy, CategoricalCrossentropy
+
 from hp.hyperparams import hyperparams
 from src.helper_check import *
+
+
+def load_dataset(dataset: str, dirs: dict, hp: hyperparams, subset: int = 0) -> Tuple[any, np.ndarray, np.ndarray, np.ndarray]:
+
+    if dataset == 'mnist':
+        path = check_path(dirs['mnist_te']+'/sign_mnist_test.csv')
+        loss = SparseCategoricalCrossentropy()
+
+        if hp.test_network:
+            X_test, y_test = mnist_data(path).testing(hp, subset=100)
+            return loss, X_test, y_test
+
+    elif dataset == 'asl':
+        # preprocess to gray
+        pass
 
 
 class mnist_data:
@@ -13,7 +30,7 @@ class mnist_data:
 
     def training(self, hp: hyperparams) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         LETTERS = check_letters(hp.letters)
-        VAL_SPLIT = check_val_split(hp.val_split)
+        VAL_SPLIT = hp.val_split
         SHUFFLE = hp.training_shuffle
 
         # creates sparse categorical int labels
@@ -45,7 +62,7 @@ class mnist_data:
 
         return X_train, y_train, X_val, y_val
 
-    def testing(self, hp: hyperparams) -> Tuple[np.ndarray, np.ndarray]:
+    def testing(self, hp: hyperparams, subset: int = 0) -> Tuple[np.ndarray, np.ndarray]:
         LETTERS = check_letters(hp.letters)
 
         # Creates sparse categorical int labels
@@ -55,6 +72,13 @@ class mnist_data:
         # Remove unused letters
         mask = self.csv_df['label'].isin(letter_2_number)
         test_df = self.csv_df[mask]
+
+        # Only use substract of test set
+        # Random picks better?!
+        if subset:
+            test_df = test_df.iloc[:subset]
+
+        print(f'Utilizing {test_df.shape[0]} samples for testing')
 
         y_test = create_label(test_df)
         X_test = reshape_mnist_to_img(test_df)

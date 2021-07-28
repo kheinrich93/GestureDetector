@@ -2,44 +2,24 @@ import os
 
 import tensorflow as tf
 import numpy as np
-
-from hp.hyperparams import hyperparams
-from src.img_utils import show_sample
-from src.dataloader import mnist_data
-from src.graph import Net
-
 from sklearn.metrics import accuracy_score
 
+from hp.hyperparams import hyperparams
+from src.dataloader import load_dataset
+from src.graph import Net
 
-def te_gesture_NN(dirs: dict, hp: hyperparams, dataset: str, model_weights: str) -> None:
-    N_CLASSES = hp.n_classes
 
+def te_gesture_NN(dirs: dict, hp: hyperparams, dataset: str, model_weights: str) -> float:
     # load dataset
-    SCALE_FACTOR = hp.scale_factor
-
-    if dataset == 'mnist':
-        # test path
-        path = dirs['mnist_te']+'/sign_mnist_test.csv'
-
-        X_test, y_test = mnist_data(path).testing(hp)
-
-        datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-            rescale=1./SCALE_FACTOR)
-
-        samples = datagen.flow(X_test, y_test)
-
-        loss = tf.keras.losses.SparseCategoricalCrossentropy()
-
-    elif dataset == 'asl':
-        # preprocess to gray
-        pass
+    loss, X_test, y_test = load_dataset(dataset, dirs, hp)
 
     # sample = X_test[1, :, :, :]
 
-    weights_path = os.path.join(dirs['cp'], model_weights, 'gestureNN')
+    weights_path = os.path.join(
+        dirs['cp'], model_weights, 'gestureNN')
 
     # Setup network
-    model = Net().gestureNN(N_CLASSES)
+    model = Net().gestureNN(hp.n_classes)
 
     # Load weights from pre-trained network
     model.load_weights(weights_path).expect_partial()
@@ -50,16 +30,12 @@ def te_gesture_NN(dirs: dict, hp: hyperparams, dataset: str, model_weights: str)
         loss=loss,
         metrics=['accuracy'])
 
-    # Print evaluation with prob
-    results = model.evaluate(samples)
-
-    print('Testing loss %s with total accuracy of %f%%' %
-          (results[0], results[1]*100))
-
     # Predict the label of the test_images
     pred = model.predict(X_test)
     pred = np.argmax(pred, axis=1)
 
     # Accuracy score
     acc = accuracy_score(y_test, pred)
-    print('Accuracy: ', acc)
+    print('Accuracy: ', acc*100, '%')
+
+    return acc
